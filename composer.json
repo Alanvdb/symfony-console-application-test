@@ -1,0 +1,13 @@
+{
+  "name": "alanvdb/symfony-console-application-test",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "AlanVdb\\Test\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.4",
+    "phpunit/phpunit": "^12.2"
+  }
+}

@@ -1,17 +1,19 @@
 {
   "name": "alanvdb/symfony-console-application-test",
-  "type": "library",
-  "autoload": {
-    "psr-4": {
-      "AlanVdb\\Test\\": "src/"
+    "type": "library",
+    "autoload": {
+      "psr-4": {
+        "AlanVdb\\Test\\": "src/"
+      }
+    },
+    "require": {
+      "php": ">=8.4",
+      "phpunit/phpunit": "^12.2",
+      "alanvdb/symfony-console-application": "^1.0",
+      "alanvdb/console-application-interface": "^3.0",
+      "symfony/console": "^7.3"
+    },
+    "require-dev": {
+      "symfony/process": "^7.3"
     }
-  },
-  "require": {
-    "php": ">=8.4",
-    "phpunit/phpunit": "^12.2",
-    "alanvdb/symfony-console-application": "*"
-  },
-  "require-dev": {
-    "symfony/process": "^7.3"
-  }
 }

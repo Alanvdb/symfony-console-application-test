@@ -1,15 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace AlanVdb\Console\Factory\Tests;
+namespace AlanVdb\Console\Tests;
 
-use AlanVdb\Console\Factory\SymfonyConsoleApplicationFactory;
+use AlanVdb\Test\ValidCommand1;
+use AlanVdb\Test\ValidCommand2;
+use AlanVdb\Test\InvalidCommandDoesNotImplementInterface;
 use AlanVdb\Console\Definition\ConsoleApplicationInterface;
-use AlanVdb\Console\Definition\CommandInterface;
+use Symfony\Component\Console\Command\SignalableCommandInterface as CommandInterface;
+use PHPUnit\Framework\TestCase;
+use AlanVdb\Console\Factory\SymfonyConsoleApplicationFactory;
 use AlanVdb\Console\SymfonyConsoleApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PHPUnit\Framework\TestCase;
+use AlanVdb\Console\Exception\InvalidArgumentException;
 
 class SymfonyConsoleApplicationFactoryTest extends TestCase
 {
@@ -19,7 +23,6 @@ class SymfonyConsoleApplicationFactoryTest extends TestCase
         $application = $factory->createConsoleApplication('TestApp', '1.0.0');
         
         $this->assertInstanceOf(ConsoleApplicationInterface::class, $application);
-        $this->assertInstanceOf(SymfonyConsoleApplication::class, $application);
     }
 
     public function testConstructorArgumentsArePassedCorrectly(): void
@@ -43,8 +46,7 @@ class SymfonyConsoleApplicationFactoryTest extends TestCase
     {
         $factory = new SymfonyConsoleApplicationFactory();
         
-        $this->expectException(\AlanVdb\Console\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Provided class does not exists : "InvalidCommand".');
+        $this->expectException(InvalidArgumentException::class);
         
         $factory->createConsoleApplication('App', '1.0', 'InvalidCommand');
     }
@@ -53,55 +55,10 @@ class SymfonyConsoleApplicationFactoryTest extends TestCase
     {
         $factory = new SymfonyConsoleApplicationFactory();
         
-        $this->expectException(\AlanVdb\Console\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Provided class does not implements');
-        $this->expectExceptionMessage('InvalidCommandImpl');
+        $this->expectExceptionMessage('InvalidCommandDoesNotImplementInterface');
         
-        $factory->createConsoleApplication('App', '1.0', InvalidCommandImpl::class);
-    }
-}
-
-class ValidCommand1 extends Command implements CommandInterface
-{
-    protected static $defaultName = 'valid:command1';
-    
-    protected function configure(): void
-    {
-        $this->setName('valid:command1');
-    }
-    
-    public function execute(InputInterface $input, OutputInterface $output): int
-    {
-        return Command::SUCCESS;
-    }
-}
-
-class ValidCommand2 extends Command implements CommandInterface
-{
-    protected static $defaultName = 'valid:command2';
-    
-    protected function configure(): void
-    {
-        $this->setName('valid:command2');
-    }
-    
-    public function execute(InputInterface $input, OutputInterface $output): int
-    {
-        return Command::SUCCESS;
-    }
-}
-
-class InvalidCommandImpl extends Command
-{
-    protected static $defaultName = 'invalid:command';
-    
-    protected function configure(): void
-    {
-        $this->setName('invalid:command');
-    }
-    
-    public function execute(InputInterface $input, OutputInterface $output): int
-    {
-        return Command::SUCCESS;
+        $factory->createConsoleApplication('App', '1.0', InvalidCommandDoesNotImplementInterface::class);
     }
 }

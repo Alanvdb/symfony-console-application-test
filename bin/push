@@ -1,0 +1,39 @@
+<?php
+
+use Symfony\Component\Process\Process;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+if ($argc < 2) {
+    echo "Usage: php bin/git-push <commit-message>\n";
+    exit(1);
+}
+
+$message = $argv[1];
+
+echo "Adding all files to staging area...";
+$process = new Process(['git', 'add', '.']);
+$process->start();
+$process->wait();
+if (!$process->isSuccessful()) {
+    throw new Exception($process->getErrorOutput());
+}
+echo " Done.\n";
+
+echo "Committing changes...";
+$process = new Process(['git', 'commit', '-m', $message]);
+$process->start();
+$process->wait();
+if (!$process->isSuccessful()) {
+    throw new Exception($process->getErrorOutput());
+}
+echo " Done with message: \"$message\".\n";
+
+echo "Pushing changes to remote repository...";
+$process = new Process(['git', 'push', 'origin', 'master']);
+$process->start();
+$process->wait();
+if (!$process->isSuccessful()) {
+    throw new Exception($process->getErrorOutput());
+}
+echo " Done.\n";

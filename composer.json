@@ -9,5 +9,8 @@
   "require": {
     "php": ">=8.4",
     "phpunit/phpunit": "^12.2"
+  },
+  "require-dev": {
+    "symfony/process": "^7.3"
   }
 }
